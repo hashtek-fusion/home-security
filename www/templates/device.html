@@ -1,0 +1,31 @@
+<ion-view view-title="Device">
+  <ion-content>
+    <h1>Monitor Home</h1>
+    <P> Click Take Photo to montior the current status of the home</P>
+    <button class="button button-balanced" ng-click="takePhoto()">
+      Take Photo
+    </button>
+
+    <div class="item item-image" ng-hide="actionItem">
+      <ion-slide-box>
+        <ion-slide>
+          <img ng-src="data:image/JPEG;base64,{{photo.image}}"/>
+        </ion-slide>
+      </ion-slide-box>
+    </div>
+
+    <div class="row" ng-show="actionItem">
+      <div class="col">{{actionItem}}</div>
+    </div>
+    <div class="row" ng-show="actionItem">
+      <div class="col col-25">Enter Photo to download (Without file name)</div>
+      <div class="col col-50"><input type="text" ng-model="photoName" placeholder="Name of the Photo"/></div>
+      <div class="col col-25">
+        <button class="button button-balanced" ng-click="getPhoto()">
+          Get Photo
+        </button>
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>

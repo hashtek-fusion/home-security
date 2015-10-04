@@ -1,0 +1,14 @@
+<ion-view view-title="Photo Gallery">
+  <ion-content>
+    <P> Recently taken Photos Gallery</P>
+    <div class="list card">
+      <div class="item item-image">
+        <ion-slide-box>
+          <ion-slide ng-repeat="photo in photos">
+            <img ng-src="data:image/JPEG;base64,{{photo.image}}"/>
+          </ion-slide>
+        </ion-slide-box>
+      </div>
+    </div>
+    </ion-content>
+  </ion-view>

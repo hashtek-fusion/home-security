@@ -1,0 +1,43 @@
+<ion-view view-title="Settings">
+  <ion-content>
+    <h4>Application Proxy Settings</h4>
+    <div class="list">
+      <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="IP Address" ng-model="settings.ipAddress" required>
+        </label>
+        </div>
+        <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="Port" ng-model="settings.port" required>
+        </label>
+          </div>
+          <div>
+
+          <ion-toggle ng-model="settings.isHttps" toggle-class="toggle-calm">HTTPS</ion-toggle>
+
+            </div>
+      </div>
+    </div>
+    <h4>API Settings</h4>
+    <div class="list">
+      <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="Storage API Path" ng-model="settings.storagePath" required>
+        </label>
+        </div>
+        <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="Publish Message Path" ng-model="settings.publishPath" required>
+        </label>
+          </div>
+        </div>
+      </div>
+    <div>
+      <button class="button button-positive" ng-click="saveSettings()">
+        Save Changes
+      </button>
+    </div>
+
+  </ion-content>
+</ion-view>

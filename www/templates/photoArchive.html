@@ -1,6 +1,13 @@
 <ion-view view-title="Photo Gallery">
   <ion-content>
-    <P> Recently taken Photos Gallery</P>
+    <h3> Recently taken Photos Gallery</h3>
+    <div class="row">
+      <div class="col">
+        <button class="button button-balanced" ng-click="loadGallery()">
+         Reload
+        </button>
+      </div>
+    </div>
     <div class="list card">
       <div class="item item-image">
         <ion-slide-box>

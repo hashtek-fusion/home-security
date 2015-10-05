@@ -21,15 +21,15 @@ angular.module('rvhHome.services', [])
   }])
 
   .factory('$urlUtil', ['$localStorage', function($localStorage) {
-    var settings= $localStorage.getObject('HomeMonitorSettings');
+    var obj= $localStorage.getObject('HomeMonitorSettings');
     return {
       storageAPI: function(){
-        var url=settings.protocol+'://'+settings.ipAddress +':'+settings.port + settings.storagePath;
+        var url=obj.protocol+'://'+obj.ipAddress +':'+obj.port + obj.storagePath;
         return url;
 
       },
       publishAPI: function(){
-        var url=settings.protocol+'://'+settings.ipAddress +':'+settings.port + settings.publishPath;
+        var url=obj.protocol+'://'+obj.ipAddress +':'+obj.port + obj.publishPath;
         return url;
       }
     }

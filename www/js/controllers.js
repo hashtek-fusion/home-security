@@ -57,20 +57,22 @@ angular.module('rvhHome.controllers', [])
 
 .controller('DeviceCtrl', function($scope, $http, $ionicLoading,$ionicPopup,$urlUtil) {
     $scope.attempt=0;
-    var fileName='TesselPicture' + Math.floor(Date.now()*1000);
+    $scope.photoName='';
     $scope.takePhoto = function(){
       $ionicLoading.show({
         template: 'Loading...'
       });
       var msgResponse='';
+      $scope.photoName='TesselPicture' + Math.floor(Date.now()*1000);
       var queryParts=[];
       queryParts.push('msg=TAKE_PHOTO');
-      queryParts.push('name='+fileName);
+      queryParts.push('name='+$scope.photoName);
       var queryParam=queryParts.join('&');
       var urlToPublish=$urlUtil.publishAPI()+'?'+queryParam;
       console.log('URL to publish::' + urlToPublish);
       $http.get(urlToPublish).then(function (data) {
         $scope.msgResponse=data.MessageId;
+       // $scope.photoName=fileName;
         $scope.getPhoto();
       }, function(err){//Error in publishing request
         $ionicLoading.hide();
@@ -81,8 +83,13 @@ angular.module('rvhHome.controllers', [])
       });
     }
 
+    $scope.setPhoto = function(photo){
+      $scope.photoName = photo;
+      $scope.getPhoto();
+    }
+
     $scope.getPhoto= function(){
-      $http.get($urlUtil.storageAPI()+'/photo?name='+fileName).then(function(response){
+      $http.get($urlUtil.storageAPI()+'/photo?name='+$scope.photoName).then(function(response){
         console.log('Response for get photo :' + JSON.stringify(response));
         $scope.photo = response.data;
         $ionicLoading.hide();
@@ -101,8 +108,7 @@ angular.module('rvhHome.controllers', [])
             template: 'Issue in capturing photo:' + JSON.stringify(err.data.message)
           });
           if(err.data.code==='NoSuchKey'){//There was a delay in image upload by Tessel device
-            $scope.actionItem='There was a delay in photo upload by Tessel. The photo name uplaoded by Tessel is -' + fileName + '.jpg. Try to get this few seconds later by entering the name of the photo above' ;
-            $scope.photoName=fileName;
+            $scope.actionItem='There was a delay in photo upload by Tessel. The photo name uplaoded by Tessel is -' + $scope.photoName + '.jpg. Try to get this few seconds later by entering the name of the photo above' ;
           }
         }
       })
@@ -110,27 +116,29 @@ angular.module('rvhHome.controllers', [])
 })
 
 .controller('PhotoArchiveCtrl', function($scope, $http,$ionicLoading,$urlUtil,$ionicPopup){
-    $ionicLoading.show({
-      template: 'Loading...'
-    });
-    $http(
-      {
-        method: 'GET',
-        url:$urlUtil.storageAPI() +'/photos'
-      }
-    ).then(function(response){//Success Call back
-        console.log('Data from storage::' + JSON.stringify(response));
-        $scope.photos = response.data;
-        $ionicLoading.hide();
-      }, function(err){//error call back
-        console.log('Error in fetching photos::' + err);
-        $ionicLoading.hide();
-        var alertPopup = $ionicPopup.alert({
-          title: 'Photo Archive',
-          template: 'Error in loading photos. Try Again later:' + JSON.stringify(err)
-        });
-      })
-
+    $scope.loadGallery= function(){
+      $ionicLoading.show({
+        template: 'Loading...'
+      });
+      $http(
+        {
+          method: 'GET',
+          url:$urlUtil.storageAPI() +'/photos'
+        }
+      ).then(function(response){//Success Call back
+          console.log('Data from storage::' + JSON.stringify(response));
+          $scope.photos = response.data;
+          $ionicLoading.hide();
+        }, function(err){//error call back
+          console.log('Error in fetching photos::' + err);
+          $ionicLoading.hide();
+          var alertPopup = $ionicPopup.alert({
+            title: 'Photo Archive',
+            template: 'Error in loading photos. Try Again later:' + JSON.stringify(err)
+          });
+        })
+    }
+    $scope.loadGallery();
 })
 
 .controller('SettingsCtrl', function($scope, $localStorage,$ionicPopup){

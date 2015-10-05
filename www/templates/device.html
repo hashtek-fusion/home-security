@@ -3,7 +3,7 @@
     <h1>Monitor Home</h1>
 
     <div class="row">
-      <div class="col col-20">Do you want to monitor home now?</div>
+      <div class="col col-66">Do you want to monitor home now?</div>
       <div class="col">
         <button class="button button-balanced" ng-click="takePhoto()">
           Take Photo
@@ -11,30 +11,32 @@
       </div>
     </div>
 
-    <div class="item item-image" ng-hide="actionItem">
-      <ion-slide-box>
-        <ion-slide>
-          <img ng-src="data:image/JPEG;base64,{{photo.image}}"/>
-        </ion-slide>
-      </ion-slide-box>
+    <div class="row" ng-hide="actionItem">
+      <div class="col item item-image" >
+        <ion-slide-box>
+          <ion-slide>
+            <img ng-src="data:image/JPEG;base64,{{photo.image}}"/>
+          </ion-slide>
+        </ion-slide-box>
+      </div>
     </div>
 
     <div class="row" ng-show="actionItem">
-      <div class="col col-20">Enter Photo to download (Without file name)</div>
-      <div class="col col-50 item item-input-inset">
+      <div class="col col-33">Photo(Without file Ext)</div>
+      <div class="col col-33 item item-input-inset">
         <label class="item-input-wrapper">
         <input type="text" ng-model="photoName" placeholder="Name of the Photo"/>
         </label>
       </div>
       <div class="col">
         <button class="button button-balanced" ng-click="getPhoto()">
-          Get Photo
+          Download
         </button>
       </div>
     </div>
 
     <div class="row" ng-show="actionItem">
-      <div class="col col-50">{{actionItem}}</div>
+      <div class="col">{{actionItem}}</div>
     </div>
 
   </ion-content>

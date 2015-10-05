@@ -33,4 +33,17 @@ angular.module('rvhHome.services', [])
         return url;
       }
     }
-  }]);
+  }])
+
+.factory('$Util', function(){
+    return{
+      isEmpty: function(obj){
+        var field;
+        for(field in obj){
+          if(obj.hasOwnProperty(field))
+            return false;
+        }
+        return true;
+      }
+    }
+});

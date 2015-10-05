@@ -1,10 +1,15 @@
 <ion-view view-title="Device">
   <ion-content>
     <h1>Monitor Home</h1>
-    <P> Click Take Photo to montior the current status of the home</P>
-    <button class="button button-balanced" ng-click="takePhoto()">
-      Take Photo
-    </button>
+
+    <div class="row">
+      <div class="col col-20">Do you want to monitor home now?</div>
+      <div class="col">
+        <button class="button button-balanced" ng-click="takePhoto()">
+          Take Photo
+        </button>
+      </div>
+    </div>
 
     <div class="item item-image" ng-hide="actionItem">
       <ion-slide-box>
@@ -15,16 +20,21 @@
     </div>
 
     <div class="row" ng-show="actionItem">
-      <div class="col">{{actionItem}}</div>
-    </div>
-    <div class="row" ng-show="actionItem">
-      <div class="col col-25">Enter Photo to download (Without file name)</div>
-      <div class="col col-50"><input type="text" ng-model="photoName" placeholder="Name of the Photo"/></div>
-      <div class="col col-25">
+      <div class="col col-20">Enter Photo to download (Without file name)</div>
+      <div class="col col-50 item item-input-inset">
+        <label class="item-input-wrapper">
+        <input type="text" ng-model="photoName" placeholder="Name of the Photo"/>
+        </label>
+      </div>
+      <div class="col">
         <button class="button button-balanced" ng-click="getPhoto()">
           Get Photo
         </button>
       </div>
+    </div>
+
+    <div class="row" ng-show="actionItem">
+      <div class="col col-50">{{actionItem}}</div>
     </div>
 
   </ion-content>

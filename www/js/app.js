@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('rvhHome', ['ionic', 'rvhHome.controllers', 'rvhHome.services'])
 
-.run(function($ionicPlatform,$localStorage) {
+.run(function($ionicPlatform,$localStorage,$Util) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -27,8 +27,10 @@ angular.module('rvhHome', ['ionic', 'rvhHome.controllers', 'rvhHome.services'])
     settings.port=8080;
     settings.storagePath='/api/aws/s3';
     settings.publishPath='/api/aws/sqs/publish';
-    $localStorage.setObject('HomeMonitorSettings', settings);
 
+    var defaultSettings= $localStorage.getObject('HomeMonitorSettings');
+    if($Util.isEmpty(defaultSettings))
+      $localStorage.setObject('HomeMonitorSettings', settings);
   });
 })
 

@@ -56,12 +56,13 @@ angular.module('rvhHome.controllers', [])
 })
 
 .controller('DeviceCtrl', function($scope, $http, $ionicLoading,$ionicPopup,$urlUtil) {
+    $scope.attempt=0;
+    var fileName='TesselPicture' + Math.floor(Date.now()*1000);
     $scope.takePhoto = function(){
       $ionicLoading.show({
         template: 'Loading...'
       });
       var msgResponse='';
-      var fileName='TesselPicture' + Math.floor(Date.now()*1000);
       var queryParts=[];
       queryParts.push('msg=TAKE_PHOTO');
       queryParts.push('name='+fileName);
@@ -70,27 +71,7 @@ angular.module('rvhHome.controllers', [])
       console.log('URL to publish::' + urlToPublish);
       $http.get(urlToPublish).then(function (data) {
         $scope.msgResponse=data.MessageId;
-        $http.get($urlUtil.storageAPI()+'/photo?name='+fileName).then(function (reponse) {
-          $scope.photo = response.data;
-          $ionicLoading.hide();
-          var alertPopup = $ionicPopup.alert({
-            title: 'Tessel Capture Photo',
-            template: 'Capturing photo request submitted successfully!!' + msgResponse
-          });
-          alertPopup.then(function(res) {
-            console.log('Request submitted successfully');
-          });
-        },function(err){
-          $ionicLoading.hide();
-          var alertPopup = $ionicPopup.alert({
-            title: 'Tessel Capture Photo',
-            template: 'Issue in capturing photo:' + JSON.stringify(err.data.message)
-          });
-          if(err.data.code==='NoSuchKey'){//There was a delay in image upload by Tessel device
-            $scope.actionItem='There was a delay in photo upload by Tessel. The photo name uplaoded by Tessel is -' + fileName + '.jpg. Try to get this few seconds later by entering the name of the photo below' ;
-            $scope.photoName=fileName;
-          }
-        });
+        $scope.getPhoto();
       }, function(err){//Error in publishing request
         $ionicLoading.hide();
         var alertPopup = $ionicPopup.alert({
@@ -100,24 +81,29 @@ angular.module('rvhHome.controllers', [])
       });
     }
 
-    $scope.getPhoto = function(){
-      $ionicLoading.show({
-        template: 'Loading...'
-      });
-      console.log('Name of the photo to download::' + $scope.photoName);
-      $http.get($urlUtil.storageAPI()+'/photo?name='+$scope.photoName).then(function(response){
+    $scope.getPhoto= function(){
+      $http.get($urlUtil.storageAPI()+'/photo?name='+fileName).then(function(response){
         console.log('Response for get photo :' + JSON.stringify(response));
         $scope.photo = response.data;
         $ionicLoading.hide();
         $scope.actionItem='';
       }, function(err){
-        $ionicLoading.hide();
-        var alertPopup = $ionicPopup.alert({
-          title: 'Tessel Capture Photo',
-          template: 'Issue in capturing photo:' + JSON.stringify(err.data.message)
-        });
-        if(err.data.code==='NoSuchKey'){//There was a delay in image upload by Tessel device
-          $scope.actionItem='There was a delay in photo upload by Tessel.Try to get this photo later' ;
+        if($scope.attempt<5 && err.data.code==='NoSuchKey') {//There was a delay in image upload by Tessel device
+          console.log('Attempt::' + $scope.attempt);
+          $scope.attempt++;
+          $scope.getPhoto();
+        }else{
+          console.log('All attempts failed . Exiting');
+          $scope.attempt=0;
+          $ionicLoading.hide();
+          var alertPopup = $ionicPopup.alert({
+            title: 'Tessel Capture Photo',
+            template: 'Issue in capturing photo:' + JSON.stringify(err.data.message)
+          });
+          if(err.data.code==='NoSuchKey'){//There was a delay in image upload by Tessel device
+            $scope.actionItem='There was a delay in photo upload by Tessel. The photo name uplaoded by Tessel is -' + fileName + '.jpg. Try to get this few seconds later by entering the name of the photo above' ;
+            $scope.photoName=fileName;
+          }
         }
       })
     }
